@@ -47,19 +47,23 @@
 \section{Four Order Runge Kutta Method }
 \label{sec:rk4}
 
-Runge–Kutta method is an effective and widely used iterative method
-for solving the initial-value problems of ordinary differential
-equations \(\frac{dr(t)}{dt}=f(r,t)\). Runge–Kutta methods perform
-several evaluation of function \(f()\) around the point
-\((r(t_{n}),t_{n})\) and then \(r(t_{n+1})\) is computed using a
-weighted average of those \(f()'s\) values. The Runge-Kutta of four
-order is defined using the following recursion formula,
+Runge–Kutta method is an effective and widely used, iterative method
+for solving ordinary differential equations
+\(\frac{dr(t)}{dt}=f(r,t)\). Runge–Kutta methods perform several
+evaluation of the function \(f()\) around a point \((r(t_{n}),t_{n})\)
+and then the point \(r(t_{n+1})\) is computed using a weighted average
+of the derivatives \(f()\) values. The derivative function is
+evaluated in approximated points that might be contained in the
+original solution.
+
+The Runge-Kutta of four order is defined using the following recursion
+formula,
 \begin{equation}
   \label{eq:RecursionFormulaeSolution}
   r_{n+1} = r_{n} + \frac{1}{6}(k_{1}+k_{2}+k_{3}+k_{4}),
 \end{equation}
-where the \(k's\) are slopes values at the different points
-given by the function \(f()\) evaluated as follow
+where the \(k's\) are the slopes values evaluated at the different
+points, these given by the function \(f()\) evaluated as follow
 \begin{subequations}
   \begin{equation}
     \label{eq:slope1}
