@@ -13,30 +13,31 @@ import numpy as np
 
 def RKN4_1fstODE(f,r,ti,tf,h,params):
     # initializing where to store the results 
-    R = np.zeros((len(r),len(time)), dtype = 'float') 
+    t = np.arange(ti,tf,h)
+    R = np.zeros((len(r),len(t)), dtype = 'float') 
     # fst index cartesian coordinate
     # scnd index the element in such coordinate
     R[:,0] = r
     #generate the new values 
-    for t in np.arange(ti,tf,h)
+    for n in range(len(t)):
         # slope at the beginning of the time step
-        k1 = f(r,t,params)
+        k1 = f(r,t[n],params)
         # use the slope k1 to step halfway through the time step
         r1 = r + k1*h/2
         # an estimate of the slope at the midpoint
-        k2 = f(r1,t+(h/2),params)
+        k2 = f(r1,t[n]+(h/2),params)
         # use the slope k2 to step halfway through the time step
         r2 = r + k2*h/2
         # another estimate of the slope at the r2 midpoint
-        k3 = f(r2,t+(h/2),params)
+        k3 = f(r2,t[n]+(h/2),params)
         # use the slope, k3, to step all the way across the time step (to t₀+h)
         r3 = r + k3*(h/2)
         # an estimate of the slope at the endpoint
-        k4 = f(r3, t + h,params)
+        k4 = f(r3, t[n] + h,params)
         # use a weighted sum of these slopes to get our final estimate of r*(t₀+h)
-        R[:, n+1] = r + (h/6)*(k1+2*k2+2*k3+k4)
+        R[:, n] = r + (h/6)*(k1+2*k2+2*k3+k4)
         # update the r value
-        r = R[:, n+1]
+        r = R[:, n]
     return R
 
 
@@ -44,21 +45,22 @@ def RKN4_1fstODE(f,r,ti,tf,h,params):
 
 def RKN4_2ndODE(f,r,v,ti,tf,h,params):
     # initializing where to store the results
-    R = np.zeros((len(r),len(time)), dtype = 'float') 
-    V = np.zeros((len(v),len(time)), dtype = 'float') 
+    t = np.arange(ti, tf+h, h)
+    R = np.zeros((len(r),len(t)), dtype = 'float') 
+    V = np.zeros((len(v),len(t)), dtype = 'float') 
     # fst index cartesian coordinate
     # scnd index element in such coordinate
     R[:,0] = r
     V[:,0] = v
     #generate the new values 
-    for n in np.arange(ti, tf+h, h):
+    for n in range(len(t)):
         # slope at the beginning of the time step
-        k1 = f(r,v,t[n+1],params)
+        k1 = f(r,v,t[n],params)
         # use the slope k1 to step halfway through the time step
         v1 = v + k1*h/2
         r1 = r + (h/2)*((v+v1)/2)
         # an estimate of the slope at the midpoint
-        k2 = f(r1,v1,t[n+1]+(h/2),params)
+        k2 = f(r1,v1,t[n]+(h/2),params)
         # use the slope k2 to step halfway through the time step
         v2 = v + k2*h/2
         r2 = r + (h/2)*((v+v2)/2)
@@ -68,11 +70,12 @@ def RKN4_2ndODE(f,r,v,ti,tf,h,params):
         v3 = v + k3*(h/2)
         r3 = r + h*((v+v3)/2)
         # an estimate of the slope at the endpoint
-        k4 = f(r3, v3, t[n+1] + h,params)
+        k4 = f(r3, v3, t[n] + h,params)
         # use a weighted sum of these slopes to get our final estimate of y*(t₀+h)
-        V[:, n+1] = v + (h/6)*(k1+2*k2+2*k3+k4)
-        R[:, n+1] = r + (h/6)*(v1+2*v2+2*v3+V[:,n+1])
+        V[:, n] = v + (h/6)*(k1+2*k2+2*k3+k4)
+        R[:, n] = r + (h/6)*(v1+2*v2+2*v3+V[:,n])
         # update the r and v values
-        r = R[:, n+1]
-        v = V[:, n+1]
+        r = R[:, n]
+        v = V[:, n]
     return R, V
+    
